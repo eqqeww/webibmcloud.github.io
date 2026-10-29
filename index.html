@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IBM Cloud Service – เว็บไซต์นำเสนอโครงงานของกลุ่ม</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;600&family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* ===== ส่วนเสริมสำหรับหน้านี้ (ไม่ต้องแก้ style.css) ===== */
+/* ============================================================
+   IBM CLOUD CONTENT (หัวข้อข้อ 2.1 - 2.5)
+============================================================ */
+
+.report-fallback.show { display: flex; }
+.report-preview + .report-preview { margin-top: 16px; height: 220px; }
+
+.sub-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+
+    margin: 56px 0 18px;
+
+    font-size: 22px;
+    font-weight: 400;
+}
+.sub-heading .section-number { margin: 0; }
+
+.tile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+
+    background: var(--border);
+    border: 1px solid var(--border);
+}
+.tile {
+    padding: 22px;
+
+    background: var(--bg-card);
+    border-top: 2px solid transparent;
+
+    transition: .2s ease;
+}
+.tile:hover { background: #262626; border-top-color: var(--blue); }
+.tile h4 { margin: 0; font-size: 17px; font-weight: 600; }
+.tile-sub { display: block; margin: 2px 0 10px; color: var(--blue-light); font-size: 12px; }
+.tile p { margin: 0; color: var(--text-muted); font-size: 13px; }
+.tile code {
+    display: block;
+    margin-top: 12px;
+
+    color: #ddd;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+}
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); }
+.table-wrap table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table-wrap th, .table-wrap td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-card);
+}
+.table-wrap th { background: #262626; }
+
+.note {
+    margin: 16px 0 0;
+    padding: 12px 18px;
+
+    border-left: 3px solid var(--blue);
+    background: var(--bg-card);
+
+    color: var(--text-muted);
+    font-size: 13px;
+}
+.note a { color: var(--blue-light); text-decoration: underline; }
+
+.pc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+
+    background: var(--border);
+    border: 1px solid var(--border);
+}
+.pc-grid > div { padding: 28px; background: var(--bg-card); }
+.pc-grid h4 { margin: 0 0 14px; font-size: 17px; }
+.pc-grid .pro h4 { color: var(--green); }
+.pc-grid .con h4 { color: #fa4d56; }
+.pc-grid ul { margin: 0; padding-left: 20px; color: #c6c6c6; font-size: 14px; }
+.pc-grid li { margin-bottom: 10px; }
+
+@media (max-width: 1050px) { .pc-grid { grid-template-columns: 1fr; } }
+
+
+/* สารบัญเนื้อหา IBM Cloud + ระยะห่างภายในแต่ละส่วน */
+.toc-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+
+    background: var(--border);
+    border: 1px solid var(--border);
+}
+.toc-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    padding: 24px;
+
+    background: var(--bg-card);
+    border-top: 2px solid transparent;
+
+    transition: .2s ease;
+}
+.toc-card:hover { background: #262626; border-top-color: var(--blue); }
+.toc-card .section-number { margin: 0; }
+.toc-card strong { font-size: 16px; font-weight: 600; }
+.toc-card span:last-child { color: var(--text-muted); font-size: 12px; }
+
+.content-section[data-nav] { scroll-margin-top: 64px; }
+.content-section { scroll-margin-top: 64px; }
+
+@media (max-width: 1050px) { .toc-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px)  { .toc-grid { grid-template-columns: 1fr; } }
+
+
+/* ฟอนต์ไทย */
+body { font-family: "IBM Plex Sans", "IBM Plex Sans Thai", Arial, sans-serif; }
+
+/* เมนูย่อย 2.1 - 2.5 */
+.nav-item { position: relative; display: flex; }
+.submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    min-width: 240px;
+    display: none;
+    flex-direction: column;
+
+    border: 1px solid var(--border);
+    background: #151515;
+    box-shadow: 0 18px 40px rgba(0,0,0,.6);
+}
+.nav-item:hover .submenu,
+.nav-item:focus-within .submenu { display: flex; }
+.submenu .nav-link { padding: 14px 20px; border-bottom: 1px solid #262626; }
+.submenu .nav-link:last-child { border-bottom: 0; }
+.submenu .nav-link.active { box-shadow: inset 3px 0 0 var(--blue); }
+.submenu .nav-link.active::after { display: none; }
+.has-sub:has(.submenu .active) > .nav-link { color: #fff; background: #1b1b1b; }
+.has-sub:has(.submenu .active) > .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 18px; right: 18px; bottom: 0;
+    height: 2px;
+    background: var(--blue);
+}
+@media (max-width: 700px) {
+    .nav-item { display: block; }
+    .submenu { position: static; display: flex; min-width: 0; border: 0; box-shadow: none; background: #101010; }
+    .submenu .nav-link { padding-left: 40px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#home"><span class="brand-mark">◆</span>WEB PRESENTATION</a>
+  <button class="menu-toggle" id="menuToggle" aria-label="เปิดเมนู">☰</button>
+  <nav class="nav-menu" id="navMenu">
+    <a class="nav-link active" href="#home">หน้าแรก</a>
+    <a class="nav-link" href="#project">หัวข้อโครงงาน</a>
+    <div class="nav-item has-sub">
+      <a class="nav-link" href="#content">เนื้อหา IBM Cloud ▾</a>
+      <div class="submenu">
+        <a class="nav-link" href="#services">2.1 Service</a>
+        <a class="nav-link" href="#location">2.2 Data Center</a>
+        <a class="nav-link" href="#pricing">2.3 Pricing Model</a>
+        <a class="nav-link" href="#proscons">2.4 Pro / Con</a>
+        <a class="nav-link" href="#cert">2.5 Certification</a>
+      </div>
+    </div>
+    <a class="nav-link" href="#course">รายวิชา</a>
+    <a class="nav-link" href="#team">ผู้จัดทำ</a>
+    <a class="nav-link" href="#teacher">ผู้สอน</a>
+  </nav>
+</header>
+
+<main>
+
+<section class="section hero" id="home">
+  <div>
+    <div class="eyebrow"><span class="status-dot"></span>WEB STATIC • CLOUD READY</div>
+    <h1>เว็บไซต์นำเสนอ<br><span>โครงงานของกลุ่ม</span></h1>
+    <p class="hero-description">เว็บไซต์ Web Static สำหรับนำเสนอหัวข้อโครงงาน IBM Cloud Service รายวิชา ผู้จัดทำ และข้อมูลผู้สอน โดยออกแบบในสไตล์ Dark Cloud Interface</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#project">ดูโครงงาน</a>
+      <a class="btn btn-secondary" href="#team">ผู้จัดทำ</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="glow-circle"></div>
+    <div class="terminal-window">
+      <div class="terminal-header"><span>cloud-project</span><span class="terminal-status">● ONLINE</span></div>
+      <div class="terminal-body">
+        <p><span class="code-blue">$</span> deploy website</p>
+        <p class="code-green">✓ HTML loaded</p>
+        <p class="code-green">✓ CSS loaded</p>
+        <p class="code-green">✓ JavaScript ready</p>
+        <p><span class="code-blue">$</span> status <span class="code-green">ONLINE</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section dark-section" id="project">
+  <div class="section-heading">
+    <div><span class="section-number">01</span><h2>หัวข้อโครงงาน</h2></div>
+    <p>ข้อมูลหลักของงานที่นำเสนอ</p>
+  </div>
+  <div class="project-grid">
+    <article class="project-card project-main">
+      <span class="card-label">PROJECT</span>
+      <h3>IBM Cloud</h3>
+      <p>เว็บไซต์นี้จัดทำขึ้นมาเพื่อต้องการนำเสนอ IBM Cloud Service</p>
+      <div class="tag-list"><span>Web Static</span><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+
+      <button class="report-preview" type="button" onclick="openPDF('documents/project-report.pdf','รายงานโครงงาน')" aria-label="เปิดรายงานโครงงาน">
+        <img src="images/sss.jpg" alt="หน้าปกรายงาน IBM Cloud Service">
+        <div class="report-overlay"><div class="overlay-pdf-icon">PDF</div><div><strong>เปิดรายงานโครงงาน</strong><span>คลิกเพื่อดูไฟล์ PDF</span></div></div>
+      </button>
+
+      <button class="report-preview report-paper" type="button" onclick="openPDF('documents/paper.pdf','Paper')" aria-label="เปิด Paper">
+        <div class="report-fallback show"><div class="document-icon">PDF</div><strong>PAPER</strong><span>คลิกเพื่อดูไฟล์ PDF</span>
+      </button>
+    </article>
+
+    <article class="project-card">
+      <span class="card-label">OBJECTIVE</span>
+      <h3>วัตถุประสงค์</h3>
+      <ul class="clean-list">
+        <li>นำเสนอข้อมูลโครงงานอย่างเป็นระบบ</li>
+        <li>สร้างเว็บไซต์ด้วย Web Static</li>
+        <li>นำเว็บไซต์ขึ้น Cloud Hosting</li>
+        <li>ออกแบบ UI ให้ใช้งานง่าย</li>
+      </ul>
+    </article>
+
+    <article class="project-card">
+      <span class="card-label">TECHNOLOGY</span>
+      <h3>เทคโนโลยีที่ใช้</h3>
+      <div class="tech-list">
+        <div class="tech-item"><b>HTML5</b><span>โครงสร้างเว็บ</span></div>
+        <div class="tech-item"><b>CSS3</b><span>ออกแบบ UI</span></div>
+        <div class="tech-item"><b>JavaScript</b><span>เพิ่ม Interaction</span></div>
+        <div class="tech-item"><b>Cloud</b><span>เผยแพร่เว็บไซต์</span></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section content-section" id="content">
+  <div class="section-heading">
+    <div><span class="section-number">02</span><h2>เนื้อหา IBM Cloud Service</h2></div>
+  </div>
+  <div class="toc-grid">
+    <a class="toc-card" href="#services"><span class="section-number">2.1</span><strong>Service (การบริการหลักๆ)</strong><span>รูปแบบบริการ as a Service ทั้ง 11 ประเภท</span></a>
+<a class="toc-card" href="#location"><span class="section-number">2.2</span><strong>Data Center Location</strong><span>ภูมิภาคและเมืองที่ตั้ง</span></a>
+<a class="toc-card" href="#pricing"><span class="section-number">2.3</span><strong>Pricing Model</strong><span>Lite, Pay-as-you-go และอื่นๆ</span></a>
+<a class="toc-card" href="#proscons"><span class="section-number">2.4</span><strong>Pro (ข้อดี) และ Con (ข้อเสีย)</strong><span>สรุปข้อดีและข้อเสีย</span></a>
+<a class="toc-card" href="#cert"><span class="section-number">2.5</span><strong>Certification path</strong><span>จากระดับเริ่มต้นถึงสูง</span></a>
+  </div>
+</section>
+
+<section class="content-section dark-section" id="services" data-nav="content">
+  <div class="section-heading">
+    <div><span class="section-number">2.1</span><h2>Service (การบริการหลักๆ)</h2></div>
+    <p>บริการหลักของ IBM Cloud แบ่งตามรูปแบบ as a Service</p>
+  </div>
+<div class="tile-grid">
+<div class="tile"><h4>2.1.1 IaaS</h4><span class="tile-sub">Infrastructure as a Service</span><p>เช่าโครงสร้างพื้นฐาน เช่น เครื่องเสมือนและเครื่องจริง</p><code>Virtual Servers for VPC · Bare Metal</code></div>
+<div class="tile"><h4>2.1.2 CaaS</h4><span class="tile-sub">Container as a Service</span><p>รันและจัดการคอนเทนเนอร์ด้วย Kubernetes</p><code>IBM Cloud Kubernetes Service · Red Hat OpenShift</code></div>
+<div class="tile"><h4>2.1.3 PaaS</h4><span class="tile-sub">Platform as a Service</span><p>แพลตฟอร์มพัฒนาและรันแอปโดยไม่ต้องดูแลเซิร์ฟเวอร์</p><code>Code Engine</code></div>
+<div class="tile"><h4>2.1.4 FaaS</h4><span class="tile-sub">Function as a Service</span><p>รันโค้ดเป็นฟังก์ชันตามเหตุการณ์ จ่ายตามการใช้จริง</p><code>Code Engine Functions</code></div>
+<div class="tile"><h4>2.1.5 DaaS</h4><span class="tile-sub">Database as a Service</span><p>ฐานข้อมูลที่ IBM ดูแลให้ ทั้ง SQL และ NoSQL</p><code>Db2 · Cloudant · Databases for PostgreSQL</code></div>
+<div class="tile"><h4>2.1.6 Security &amp; Identity</h4><span class="tile-sub">ความปลอดภัยและการยืนยันตัวตน</span><p>จัดการสิทธิ์ผู้ใช้ กุญแจเข้ารหัส และ compliance</p><code>IAM · Key Protect · Secrets Manager</code></div>
+<div class="tile"><h4>2.1.7 Internet of Things</h4><span class="tile-sub">IoT (เทียบกับ Azure IoT)</span><p>Watson IoT Platform ถูกยกเลิกแล้ว ปัจจุบันเน้นชุด Maximo ส่วน Azure มี IoT Hub</p><code>Maximo Application Suite</code></div>
+<div class="tile"><h4>2.1.8 STaaS</h4><span class="tile-sub">Storage as a Service</span><p>เก็บข้อมูลแบบอ็อบเจ็กต์ บล็อก และไฟล์</p><code>Cloud Object Storage · Block · File</code></div>
+<div class="tile"><h4>2.1.9 Big Data &amp; Analytics</h4><span class="tile-sub">วิเคราะห์ข้อมูลขนาดใหญ่</span><p>คลังข้อมูลและแพลตฟอร์มข้อมูลสำหรับงาน AI</p><code>watsonx.data · Analytics Engine</code></div>
+<div class="tile"><h4>2.1.10 BCaaS</h4><span class="tile-sub">Blockchain as a Service</span><p>IBM Blockchain Platform ยุติการขายแล้ว จึงเป็นบริการเดิม</p><code>Hyperledger Fabric</code></div>
+<div class="tile"><h4>2.1.11 LBaaS</h4><span class="tile-sub">Load Balancer as a Service</span><p>กระจายทราฟฟิกไปหลายเซิร์ฟเวอร์เพื่อความเสถียร</p><code>VPC Application / Network LB</code></div>
+  </div>
+  <p class="note">แหล่งเปรียบเทียบ: <a href="https://comparecloud.in" target="_blank" rel="noopener">comparecloud.in</a> · ตรวจชื่อบริการล่าสุดที่ <a href="https://cloud.ibm.com/catalog" target="_blank" rel="noopener">IBM Cloud Catalog</a></p>
+</section>
+
+<section class="section content-section" id="location" data-nav="content">
+  <div class="section-heading">
+    <div><span class="section-number">2.2</span><h2>Data Center Location</h2></div>
+    <p>ศูนย์ข้อมูลแบบ Multizone Region (MZR)</p>
+  </div>
+<div class="table-wrap"><table>
+    <tr><th>ภูมิภาค</th><th>เมืองหลัก</th></tr>
+    <tr><td>อเมริกาเหนือ</td><td>Dallas · Washington DC · Toronto · Montreal</td></tr>
+    <tr><td>อเมริกาใต้</td><td>São Paulo</td></tr>
+    <tr><td>ยุโรป</td><td>London · Frankfurt · Madrid</td></tr>
+    <tr><td>เอเชียแปซิฟิก</td><td>Tokyo · Osaka · Sydney</td></tr>
+  </table></div>
+  <p class="note">ประเทศไทยยังไม่มี Region ของ IBM Cloud · ตรวจรายการล่าสุดที่ <a href="https://cloud.ibm.com/docs/overview?topic=overview-locations" target="_blank" rel="noopener">IBM Cloud Locations</a></p>
+</section>
+
+<section class="content-section dark-section" id="pricing" data-nav="content">
+  <div class="section-heading">
+    <div><span class="section-number">2.3</span><h2>Pricing Model</h2></div>
+    <p>รูปแบบการคิดราคาของ IBM Cloud</p>
+  </div>
+<div class="tile-grid">
+<div class="tile"><h4>Lite</h4><span class="tile-sub">ใช้ฟรี</span><p>แพ็กเกจฟรีของบางบริการ มีข้อจำกัดปริมาณ เหมาะกับการทดลอง</p></div>
+<div class="tile"><h4>Pay-as-you-go</h4><span class="tile-sub">จ่ายตามใช้จริง</span><p>คิดตามชั่วโมงหรือปริมาณ ไม่มีสัญญาผูกมัด</p></div>
+<div class="tile"><h4>Subscription</h4><span class="tile-sub">สัญญารายเดือน/ปี</span><p>จ่ายล่วงหน้าเพื่อรับส่วนลดสำหรับงานที่ใช้ต่อเนื่อง</p></div>
+<div class="tile"><h4>Reserved / Committed</h4><span class="tile-sub">จองล่วงหน้า</span><p>ผูกสัญญาระยะยาวเพื่อต้นทุนต่อหน่วยที่ต่ำลง</p></div>
+  </div>
+  <p class="note">ประเมินค่าใช้จ่ายที่ <a href="https://cloud.ibm.com/estimator" target="_blank" rel="noopener">Cost estimator</a> · ราคาเปลี่ยนตามช่วงเวลา ควรระบุวันที่อ้างอิง</p>
+</section>
+
+<section class="section content-section" id="proscons" data-nav="content">
+  <div class="section-heading">
+    <div><span class="section-number">2.4</span><h2>Pro (ข้อดี) และ Con (ข้อเสีย)</h2></div>
+    <p>จุดแข็งและข้อจำกัดเมื่อเทียบกับ CSP รายใหญ่</p>
+  </div>
+<div class="pc-grid">
+    <div class="pro"><h4>ข้อดี</h4><ul><li>แข็งแรงด้าน Hybrid cloud และ Red Hat OpenShift</li><li>เน้นความปลอดภัยและ compliance เหมาะกับธนาคาร/ภาครัฐ</li><li>มีเครื่องมือ AI และข้อมูลผ่าน watsonx</li><li>มีตัวเลือก Bare Metal และการแยกทรัพยากรเฉพาะลูกค้า</li><li>มีแพ็กเกจ Lite ให้ทดลองฟรี</li></ul></div>
+    <div class="con"><h4>ข้อเสีย</h4><ul><li>ส่วนแบ่งตลาดน้อยกว่า AWS, Azure, Google Cloud</li><li>จำนวน Region น้อยกว่า และไม่มี Region ในไทย</li><li>แหล่งเรียนรู้ภาษาไทยมีจำกัด</li><li>บางบริการถูกยกเลิก/เปลี่ยนชื่อ ต้องตามข่าวสาร</li><li>ระบบนิเวศบริการสำเร็จรูปน้อยกว่าเจ้าใหญ่</li></ul></div>
+  </div>
+</section>
+
+<section class="content-section dark-section" id="cert" data-nav="content">
+  <div class="section-heading">
+    <div><span class="section-number">2.5</span><h2>Certification path</h2></div>
+    <p>เส้นทางใบรับรองจากพื้นฐานสู่ผู้เชี่ยวชาญ</p>
+  </div>
+<div class="tile-grid">
+<div class="tile"><h4>IBM Cloud Foundations</h4><span class="tile-sub">ระดับเริ่มต้น</span><p>แนวคิดคลาวด์และบริการพื้นฐาน (IBM SkillsBuild)</p></div>
+<div class="tile"><h4>Cloud Developer / DevOps</h4><span class="tile-sub">ระดับกลาง</span><p>พัฒนาและปล่อยแอป, Kubernetes, CI/CD</p></div>
+<div class="tile"><h4>Security Engineer</h4><span class="tile-sub">ระดับกลาง–สูง</span><p>ออกแบบและดูแลความปลอดภัยบน IBM Cloud</p></div>
+<div class="tile"><h4>Solution Architect</h4><span class="tile-sub">ระดับสูง</span><p>ออกแบบสถาปัตยกรรมคลาวด์ระดับองค์กร</p></div>
+  </div>
+  <p class="note">ชื่อใบรับรองเปลี่ยนตามปี ยืนยันที่ <a href="https://www.ibm.com/training/certification" target="_blank" rel="noopener">IBM Training &amp; Certification</a></p>
+</section>
+
+<section class="section content-section" id="course">
+  <div class="section-heading">
+    <div><span class="section-number">03</span><h2>รายวิชา</h2></div>
+    <p>ข้อมูลสำหรับการนำเสนอหน้าชั้นเรียน</p>
+  </div>
+  <div class="course-panel">
+    <div class="course-title"><span class="card-label">COURSE</span><h3>เทคโนโลยีการประมวลผลแบบคลาวด์</h3><p>รหัสวิชา: 0904327</p></div>
+    <div class="course-info-grid">
+      <div class="info-box"><span>ภาคการศึกษา</span><strong>ภาคเรียนที่ 1 / 2569</strong></div>
+      <div class="info-box"><span>หัวข้องาน</span><strong>Web Static + Cloud</strong></div>
+      <div class="info-box"><span>มหาวิทยาลัย</span><strong>มหาวิทยาลัยมหาสารคาม</strong></div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section dark-section" id="team">
+  <div class="section-heading">
+    <div><span class="section-number">04</span><h2>ผู้จัดทำ</h2></div>
+    <p>สมาชิกกลุ่มผู้พัฒนาเว็บไซต์</p>
+  </div>
+  <div class="team-grid">
+<article class="member-card"><span class="member-number">01</span><div class="avatar">P1</div><h3>น.ส.คันธรส สายโรจน์</h3><p>รหัสนักศึกษา: 67010918064</p></article>
+<article class="member-card"><span class="member-number">02</span><div class="avatar">P2</div><h3>นาย พีรภัทร กลึงพุดชา</h3><p>รหัสนักศึกษา: 67010918040</p></article>
+<article class="member-card"><span class="member-number">03</span><div class="avatar">P3</div><h3>นาย วิศวะ เขตอนันต์</h3><p>รหัสนักศึกษา: 67010918058</p></article>
+<article class="member-card"><span class="member-number">04</span><div class="avatar">P4</div><h3>นางสาวสงกรานต์ หนูน้อย</h3><p>รหัสนักศึกษา: 66010916021</p></article>
+<article class="member-card"><span class="member-number">05</span><div class="avatar">P5</div><h3>นายกณวรรธน์ คำหารพล</h3><p>รหัสนักศึกษา: 66010916063</p></article>
+  </div>
+</section>
+
+<section class="section content-section" id="teacher">
+  <div class="section-heading">
+    <div><span class="section-number">05</span><h2>ผู้สอน</h2></div>
+    <p>อาจารย์ผู้สอนประจำรายวิชา</p>
+  </div>
+  <div class="instructor-panel">
+    <div class="instructor-icon">✦</div>
+    <div><span class="card-label">INSTRUCTOR</span><h3>อาจารย์ ดร.อิทธิพล เอี่ยมภูงา</h3><p>อาจารย์ประจำรายวิชา เทคโนโลยีการประมวลผลแบบคลาวด์</p></div>
+  </div>
+</section>
+
+<section class="section cloud-section" id="deploy">
+  <div class="cloud-banner">
+    <div><span class="card-label">DEPLOYMENT</span><h2>Ready for Cloud</h2><p>เว็บไซต์นี้เป็น Web Static สามารถอัปโหลดขึ้น AWS, Google Cloud, IBM Cloud หรือ Free Web Hosting ที่รองรับ Static Website ได้</p></div>
+    <div class="cloud-badge"><span>STATUS</span><strong>READY</strong></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer"
+  <span><strong>WEB PRESENTATION</strong> · Web Static Project · ไม่ใช่เว็บไซต์ทางการของ IBM</span>
+  <span>© 2026 Group Project</span>
+</footer>
+
+<div class="pdf-modal" id="pdfModal" aria-hidden="true">
+  <div class="pdf-container">
+    <div class="pdf-header">
+      <div class="pdf-title"><span>PROJECT REPORT</span><h3 id="pdfTitle">รายงานโครงงาน</h3></div>
+      <button class="pdf-close" type="button" onclick="closePDF()" aria-label="ปิด">×</button>
+    </div>
+    <div class="pdf-body"><iframe id="pdfViewer" title="PDF Viewer"></iframe></div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+/* เปิด PDF ได้หลายไฟล์: openPDF("documents/ไฟล์.pdf","ชื่อที่แสดง") */
+function openPDF(file, title) {
+    var modal = document.getElementById("pdfModal");
+    var viewer = document.getElementById("pdfViewer");
+    var t = document.getElementById("pdfTitle");
+    viewer.src = file || "documents/project-report.pdf";
+    if (t && title) { t.textContent = title; }
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+}
+</script>
+</body>
+</html>
